@@ -10,8 +10,7 @@ var bodyParser = require("body-parser");
 var app = express();
 require('dotenv').load();
 var config = require('./config.js');
-var passport = require('./app/routes/github.js');
-require('./app/config/passport')(passport);
+var passport = require('./app/routes/logon.js');
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -26,15 +25,15 @@ app.use('/common', express.static(process.cwd() + '/app/common'));
 
 app.use(session({
 	secret: config.session.secret,
-	resave: false,
+	resave: true,
 	saveUninitialized: true
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true}));
+
 app.use(setUserInfo);
-app.enable('trust proxy')
 routes(app, passport);
 
 var port = config.app.port;

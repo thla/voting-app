@@ -1,17 +1,12 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-var User = new Schema({
-	github: {
-		id: String,
-		username: String,
-        publicRepos: Number
-	},
-   nbrClicks: {
-      clicks: Number
-   }
+const userSchema = mongoose.Schema({
+	uid: { type: String, require: true },
+	username: { type: String, require: true}
 });
 
-module.exports = mongoose.model('User', User);
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;

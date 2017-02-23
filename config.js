@@ -8,6 +8,9 @@ config.db.port = process.env.PORT || 5000;
 config.GITHUB_KEY = process.env.GITHUB_KEY || 'declare your github key here';
 config.GITHUB_SECRET = process.env.GITHUB_SECRET || 'declare your github secret here';
 
+config.TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY || 'declare your twitter key here';
+config.TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET || 'declare your twitter secret here';
+
 config.session = {};
 config.session.secret = process.env.SESSION_SECRET;
 

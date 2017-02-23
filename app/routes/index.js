@@ -45,15 +45,24 @@ module.exports = function (app, passport) {
 		});
 	
 	
-app.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
-
-app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/new' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });		
+	//twitter oauth 
+	app.get('/auth/twitter', passport.authenticate('twitter'));
+	
+	//twitter callback, on success redirect user to their polls, on failure redirect to home page
+	app.get('/auth/twitter/callback', passport.authenticate('twitter', {
+		failureRedirect: '/',
+		successRedirect: '/'
+	}));	
+	
+	app.get('/auth/github',
+	  passport.authenticate('github', { scope: [ 'user:email' ] }));
+	
+	app.get('/auth/github/callback', 
+	  passport.authenticate('github', { failureRedirect: '/' }),
+	  function(req, res) {
+	    // Successful authentication, redirect home.
+	    res.redirect('/');
+	  });		
 		
 
 

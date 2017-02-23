@@ -18,7 +18,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 {{#if user}}
-                    <a href="/profile" class="navbar-brand">Welcome,{{user.username}}!</a>
+                    <a href="/profile" class="navbar-brand">Welcome, {{user.username}}!</a>
                 {{else}}
                     <a class="navbar-brand" href="/">Voting App</a>
                 {{/if}}
@@ -32,8 +32,8 @@
                         <li><a href="/profile">Profile</a></li>
                         <li><a href="/logout">Logout</a></li>
                     {{else}}
-                        <li><a href="/login">Signup/Login</a></li>
-                        <button onclick="window.location.href='/auth/github'" type="button" class="btn btn-default navbar-btn githubButton">Sign in with Github</button>
+                        <li><button onclick="window.location.href='/auth/github'" type="button" class="btn  navbar-btn githubButton">Sign in with Github</button></li>
+                        <li><button onclick="window.location.href='/auth/twitter'" type="button" class="btn btn-default navbar-btn twitterButton">Sign in with Twitter</button></li>
                     {{/if}}
                 </ul>
           <!--      <form class="navbar-form navbar-right">
