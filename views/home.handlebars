@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">Polls</div>
+        <div class="panel-body">
+            <div class="list-group">
+            {{#each polls}}
+                <button type="button" class="list-group-item" onclick="window.location.href='/poll/{{id}}'">{{question}}</button>
+            {{else}}
+                <div class="alert alert-info" role="alert">no polls available</div>
+            {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

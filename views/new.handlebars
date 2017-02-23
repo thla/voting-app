@@ -1,0 +1,20 @@
+<div class="container">
+	<div class="panel panel-default">
+		<div class="panel-heading">Create a new poll!</div>
+		<div class="panel-body">
+			<form name='pollForm' action='/new' method='post'>
+				<div class='form-group form-group-lg'>
+					<input id='question' name='question' type='text' class='form-control' placeholder="Type your question here. . .">
+				</div>
+				<div class='form-group'>
+					<label for="option-field">Options (separated by line): </label>
+					<textarea id="option-field" class="form-control" rows="4"></textarea>
+				</div>
+				<button type='submit' class='btn btn-primary'>Submit</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script src='/public/js/new.validator.js'>
+</script>
