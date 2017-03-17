@@ -1,0 +1,70 @@
+<div class="container">
+	<div class="panel panel-default">
+		<div class="panel-heading">Poll {{poll}}</div>
+		<div class="panel-body">
+        	<div id='pollInfo col'>
+        		<h3 id='question'>{{poll.question}}</h3>
+        		<form id='voteForm' action='/poll/{{poll.id}}' method='post' enctype="application/x-www-form-urlencoded">
+        		    <div class='form-group'>
+        		    <select class="selectpicker btn-block" id="option" name="option">
+                        {{#each poll.options}}
+                            <option title="Combo{{@index}}">{{this}}</option>
+                        {{else}}
+                            <p class="empty">No options available!</p>
+                        {{/each}}                    
+                      </select>
+                      </div>
+        			<button type='submit' class='btn btn-lg btn-block btn-primary voteButton'>Vote</button>
+        		</form>
+        		{{#if isLoggedIn}}
+        		    <p>
+                    <form method="post" action="/poll/{{poll.id}}" enctype="application/x-www-form-urlencoded" style='display: inline'>
+                      <input name="_method" type="hidden" value="delete" />
+                      <button type="submit" class='btn btn-lg btn-block btn-danger'>Delete this Poll</button>
+                    </form>
+                    </p>
+        		    <p>
+                    <button class='btn btn-lg btn-block' onclick="window.open('https://twitter.com/intent/tweet?text={{twittermessage}}')" class='btn btn-primary'>Share on Twitter</button>
+                    </p>
+
+        		{{/if}}
+        	</div>
+        	<div id='chart col'>
+        		<canvas id='poll' width="400" height="400"></canvas>
+        	</div>
+        </div>
+    </div>
+</div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>
+
+<script>
+  var pollOptions = [{{{poll.options}}}]
+  var pollData = [{{{poll.votes}}}];
+  var ctx = document.getElementById("poll");
+  var myChart = new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+  labels: pollOptions,
+        datasets: [{
+            label: '# of Votes',
+            data: pollData,
+         backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            hoverBackgroundColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ]        }]
+    },
+});
+</script>

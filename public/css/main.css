@@ -119,8 +119,13 @@ img {
 	text-align: center;
 }
 
+.navbar-nav > li{
+  padding-left:4px;
+  padding-right:4px;
+}
+
 .btn {	/* Styling for buttons */
-	margin: 0 8px;
+	/* margin: 0 8px; */
 	color: white;
 	background-color: #00BCD4;
 	display: inline-block;
@@ -128,7 +133,6 @@ img {
 	font-size: 14px;
 	border-radius: 3px;
 	padding: 10px 5px;
-	width: 100px;
 	font-weight: 500;
 }
 

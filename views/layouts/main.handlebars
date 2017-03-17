@@ -25,15 +25,14 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right btn-toolbar">
                     {{#if user}}
          				<li><a href='/new'>New Poll</a></li>
         				<li><a href='/mypolls'>My Polls</a></li>
-                        <li><a href="/profile">Profile</a></li>
                         <li><a href="/logout">Logout</a></li>
                     {{else}}
-                        <li><button onclick="window.location.href='/auth/github'" type="button" class="btn  navbar-btn githubButton">Sign in with Github</button></li>
-                        <li><button onclick="window.location.href='/auth/twitter'" type="button" class="btn btn-default navbar-btn twitterButton">Sign in with Twitter</button></li>
+                        <li><p class="navbar-btn"><button onclick="window.location.href='/auth/github'" type="button" class="btn  navbar-btn githubButton">Sign in with Github</button></p></li>
+                        <li><p class="navbar-btn"><button onclick="window.location.href='/auth/twitter'" type="button" class="btn btn-default navbar-btn twitterButton">Sign in with Twitter</button></p></li>
                     {{/if}}
                 </ul>
           <!--      <form class="navbar-form navbar-right">

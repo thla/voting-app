@@ -23,25 +23,18 @@ module.exports = function (app, passport) {
 			res.render('new');
 		})
 		.post( (req, res) => {
-			console.log(req.body.question);
-			const options = getOptions(req.body);
-		
-			//const newPoll = Poll({ _user_id: req.user._id , question: req.body.question, options: options.options, votes: options.votes });
-		
-			//newPoll.save(function(err, poll) {
-			//	if(err) {
-			//		console.log(err);
-			//		res.redirect('/new');
-			//	} else {
-					res.redirect('/new');
-			//	}
-			//}); 
+			pollHandler.newPoll(req, res);
 		});
 	
 
 	app.route('/')
 		.get(function(req, res) {
 			pollHandler.getPolls(req, res, 'home');
+		});
+	
+	app.route('/mypolls').all(isLoggedIn)
+		.get(function(req, res) {
+			pollHandler.getMyPolls(req, res, 'mypolls');
 		});
 	
 	
@@ -77,6 +70,13 @@ module.exports = function (app, passport) {
 			res.sendFile(path + '/public/profile.html');
 		});
 
+
+	app.route('/poll/:id')
+		.get(pollHandler.viewPoll)
+		.post(isLoggedIn, pollHandler.addOptions)
+		.delete(isLoggedIn, pollHandler.deletePoll);
+ //   	
+
 	app.route('/api/:id')
 		.get(isLoggedIn, function (req, res) {
 			res.json(req.user.github);
@@ -98,20 +98,3 @@ module.exports = function (app, passport) {
 		.delete(isLoggedIn, clickHandler.resetClicks);
 };
 
-function getOptions(inputs) {
-	if(typeof inputs !== 'object') return;
-
-	var options = [];
-	var votes = [];
-
-	for(var key in inputs) {
-		if(key.indexOf('option-field') !== -1) {
-			var option = inputs[key];
-			if(option !== '') {
-				options.push(option);
-				votes.push(0);
-			}
-		}
-	}
-	return {options: options, votes: votes}
-}
