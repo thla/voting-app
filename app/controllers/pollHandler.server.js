@@ -16,9 +16,9 @@ function pollHandler() {
 	};
 	
 	this.newPoll = function(req, res) {
-			const options = getOptions(req.body);
+			const optionsArray = getOptions(req.body);
 		
-			const newPoll = Poll({ _user_id: req.user._id , question: req.body.question, options: options.options, votes: options.votes });
+			const newPoll = Poll({ _user_id: req.user._id , question: req.body.question, options: optionsArray });
 		
 			newPoll.save(function(err, poll) {
 				if(err) {
@@ -57,6 +57,8 @@ function pollHandler() {
 	      });
 	      res.render('poll', {
 	        poll: poll,
+	        optionNames: optionNames,
+	        data: data,	        
 	        isLoggedIn: req.user ? true : false,
 	        twittermessage: `Vote for my poll, ${poll.question}: ${url} `
 	      });
@@ -80,53 +82,35 @@ function pollHandler() {
 	};
 	
 	
-	this .addOptions = function(req, res) {
-		const userIp = req.ip;
-
-		Poll.where({ _id: req.params.id }).findOne().exec()
-		.then(function(poll){
-/*			if(poll.ips.indexOf(userIp) === 0) {
-				res.redirect('/poll/' + req.params.id);
-				throw 'this person has already voted';
-			}
-*/	
-			var incrementVote = {};
-			incrementVote['votes.' + req.body.option] = 1;
-			return poll.update({ $inc: incrementVote }).exec()
-		})
-		.then(function(poll){
-			if(poll) res.redirect('/poll/' + req.params.id);
-		})
-		.catch(function(err){
-			console.log(err)
-			throw err;
-		});
-	};
+	this.addOption = function(req, res) {
+		const optionname = req.body.newoption;
+		if ( optionname == '' || optionname == undefined )
+		{
+			console.log('Cannot add empty option');		
+			res.redirect('/poll/' + req.params.id);
+		}
+		
+		const newoption = {name : optionname, count: 0};console.log(newoption)
+		const poll = Poll.where('_id').eq(req.params.id);
+		poll.update({$push: {options: newoption}})
+			.exec(function(err, poll)
+		{
+    		if (err) return res.sendStatus(500);
+    		res.redirect('/poll/' + req.params.id);
+		});		
+	}
 	
 	
 	this.vote = function(req, res) {
-		Poll.findOneAndUpdate({
-				'id': req.poll.id
-			}, {
-				$inc: {
-					'nbrClicks.clicks': 1
-				}
-			})
-			.exec(function(err, result) {
-				if (err) {
-					throw err;
-				}
-
-				const pollData = {
-						question: result.question,
-						options: result.options,
-						votes: result.votes
-					};
-		
-				res.render('poll', { pollData: JSON.stringify(pollData) });
-
-			});
-		};
+		Poll.update( {
+		  _id: req.params.id,
+		  "options.name": req.body.option
+		}, {
+		  $inc: {"options.$.count": 1},
+		}, function(err, raw) {
+		  if (err) return res.sendStatus(500);
+		  res.redirect('/poll/' + req.params.id);
+		});
 	}
 
 
@@ -134,7 +118,7 @@ function pollHandler() {
 		if(typeof inputs !== 'object') return;
 	
 		var options = [];
-		var votes = [];
+		var optionsArray = [];
 	
 		for(var key in inputs) {
 			if(key.indexOf('option-field') !== -1) {
@@ -143,13 +127,16 @@ function pollHandler() {
 				if(option !== '') {
 					options = option.split("\r\n");
 					options = options.filter(function(n){ return n != '' && n != undefined }); 
-					votes = Array.apply(null, Array(options.length)).map(Number.prototype.valueOf,0);
-					//votes.push(0);
+					for (var i = 0; i < options.length; i++) {
+						optionsArray.push({"name": options[i], "count": 0});
+						console.log(options[i]);
+					}
 					break;
 				}
 			}
 		}
-		return {options: options, votes: votes}
+		return optionsArray;
 	}
+}
 
 module.exports = pollHandler;

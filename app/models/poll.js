@@ -5,8 +5,10 @@ const mongoose = require('mongoose');
 const pollSchema = mongoose.Schema({
 	_user_id: { type: String, require: true },
 	question: { type: String, require: true },
-	options: [],
-	votes: [],
+	options: [{
+		name: String,
+		count: Number
+	}],
 	ips: []
 });
 

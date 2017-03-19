@@ -73,7 +73,8 @@ module.exports = function (app, passport) {
 
 	app.route('/poll/:id')
 		.get(pollHandler.viewPoll)
-		.post(isLoggedIn, pollHandler.addOptions)
+		.post(pollHandler.vote)
+		.put(isLoggedIn, pollHandler.addOption)
 		.delete(isLoggedIn, pollHandler.deletePoll);
  //   	
 

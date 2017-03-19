@@ -1,14 +1,15 @@
 <div class="container">
 	<div class="panel panel-default">
-		<div class="panel-heading">Poll {{poll}}</div>
+		<div class="panel-heading">Poll</div>
 		<div class="panel-body">
-        	<div id='pollInfo col'>
+		    <div class="row">
+        	<div id='pollInfo col' class="col-md-6">
         		<h3 id='question'>{{poll.question}}</h3>
         		<form id='voteForm' action='/poll/{{poll.id}}' method='post' enctype="application/x-www-form-urlencoded">
         		    <div class='form-group'>
         		    <select class="selectpicker btn-block" id="option" name="option">
                         {{#each poll.options}}
-                            <option title="Combo{{@index}}">{{this}}</option>
+                            <option title="Combo{{@index}}">{{this.name}}</option>
                         {{else}}
                             <p class="empty">No options available!</p>
                         {{/each}}                    
@@ -26,12 +27,23 @@
         		    <p>
                     <button class='btn btn-lg btn-block' onclick="window.open('https://twitter.com/intent/tweet?text={{twittermessage}}')" class='btn btn-primary'>Share on Twitter</button>
                     </p>
-
+        		    <p>
+                    <div class="form-inline">
+                        <form action="/poll/{{poll.id}}" method='post' enctype="application/x-www-form-urlencoded">
+		                    <input type='hidden' name='_method' value='PUT'>
+                             <label>Add new poll option: </label> <input name='newoption' type="text" size="30" class="form-control" /> <button type="submit" class='btn'>Add Poll option</button>
+                       </form>
+                   </div>
+        		    <p>
+                    <p>
+                        <label id="totalcount">test</label>
+                    </p>
         		{{/if}}
         	</div>
-        	<div id='chart col'>
+        	<div id='chart col' class="col-md-6">
         		<canvas id='poll' width="400" height="400"></canvas>
         	</div>
+        	</div> 
         </div>
     </div>
 </div>
@@ -39,8 +51,15 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>
 
 <script>
-  var pollOptions = [{{{poll.options}}}]
-  var pollData = [{{{poll.votes}}}];
+  var pollOptions = [{{{optionNames}}}];
+  var pollData = [{{{data}}}];
+  var count = 0;
+   for(var i=0, n=pollData.length; i < n; i++) 
+   { 
+      count += pollData[i]; 
+   }  
+   document.getElementById('totalcount').innerHTML = 'Total number of votes: ' + count;
+  
   var ctx = document.getElementById("poll");
   var myChart = new Chart(ctx, {
   type: 'doughnut',
