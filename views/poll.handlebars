@@ -58,8 +58,10 @@
    { 
       count += pollData[i]; 
    }  
-   document.getElementById('totalcount').innerHTML = 'Total number of votes: ' + count;
-  
+   var totalcount = document.getElementById('totalcount');
+   if (totalcount !== null) {
+    totalcount.innerHTML = 'Total number of votes: ' + count;
+   }
   var ctx = document.getElementById("poll");
   var myChart = new Chart(ctx, {
   type: 'doughnut',
